@@ -21,8 +21,10 @@ const { recipes } = Astro.props;
 const base = import.meta.env.BASE_URL;
 ---
 
-<Base title={tag}>
-  <a href={base} class="back-link">← Alle recepten</a>
+<Base
+  title={tag}
+  breadcrumbs={[{ label: 'Recepten', href: base }, { label: tag }]}
+>
   <h1>{tag} <span class="count">({recipes.length})</span></h1>
   <div class="recipe-grid">
     {recipes.map((recipe) => <RecipeCard recipe={recipe} base={base} />)}
@@ -30,16 +32,6 @@ const base = import.meta.env.BASE_URL;
 </Base>
 
 <style>
-  .back-link {
-    display: inline-block;
-    margin-bottom: 1rem;
-    color: #888;
-    text-decoration: none;
-    font-size: 0.9em;
-  }
-
-  .back-link:hover { color: #b85c38; }
-
   .count {
     font-weight: 400;
     color: #888;

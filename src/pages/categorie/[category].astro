@@ -22,8 +22,10 @@ const base = import.meta.env.BASE_URL;
 const heading = category.charAt(0).toUpperCase() + category.slice(1);
 ---
 
-<Base title={heading}>
-  <a href={base} class="back-link">← Alle recepten</a>
+<Base
+  title={heading}
+  breadcrumbs={[{ label: 'Recepten', href: base }, { label: category }]}
+>
   <h1>{heading} <span class="count">({recipes.length})</span></h1>
   <div class="recipe-grid">
     {recipes.map((recipe) => <RecipeCard recipe={recipe} base={base} />)}
@@ -31,16 +33,6 @@ const heading = category.charAt(0).toUpperCase() + category.slice(1);
 </Base>
 
 <style>
-  .back-link {
-    display: inline-block;
-    margin-bottom: 1rem;
-    color: #888;
-    text-decoration: none;
-    font-size: 0.9em;
-  }
-
-  .back-link:hover { color: #b85c38; }
-
   .count {
     font-weight: 400;
     color: #888;

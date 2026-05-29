@@ -16,8 +16,10 @@ const recipes = (await getCollection('recipes', (r) => !r.data.draft))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 ---
 
-<Base title="Voor de kids">
-  <a href={base} class="back-link">← Alle recepten</a>
+<Base
+  title="Voor de kids"
+  breadcrumbs={[{ label: 'Recepten', href: base }, { label: 'voor de kids' }]}
+>
   <h1>Voor de kids <span class="count">({recipes.length})</span></h1>
   <p class="subtitle">Recepten die Emma en Annemijn goedkeuren — geen 😒 of 🤢.</p>
   {recipes.length > 0 ? (
@@ -30,16 +32,6 @@ const recipes = (await getCollection('recipes', (r) => !r.data.draft))
 </Base>
 
 <style>
-  .back-link {
-    display: inline-block;
-    margin-bottom: 1rem;
-    color: #888;
-    text-decoration: none;
-    font-size: 0.9em;
-  }
-
-  .back-link:hover { color: #b85c38; }
-
   .count {
     font-weight: 400;
     color: #888;

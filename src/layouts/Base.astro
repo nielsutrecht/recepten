@@ -1,9 +1,10 @@
 ---
 interface Props {
   title: string;
+  breadcrumbs?: Array<{ label: string; href?: string }>;
 }
 
-const { title } = Astro.props;
+const { title, breadcrumbs } = Astro.props;
 const base = import.meta.env.BASE_URL;
 ---
 
@@ -26,14 +27,66 @@ const base = import.meta.env.BASE_URL;
       }
 
       header {
-        padding: 1rem 1.5rem;
+        padding: 0.75rem 1.5rem;
         border-bottom: 1px solid #e8e4df;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
       }
 
-      header a {
+      .site-title {
         text-decoration: none;
         color: inherit;
         font-weight: 600;
+        font-size: 1.05rem;
+        flex-shrink: 0;
+      }
+
+      nav {
+        display: flex;
+        gap: 1.25rem;
+        align-items: center;
+        flex-shrink: 0;
+      }
+
+      nav a {
+        text-decoration: none;
+        color: #666;
+        font-size: 0.9rem;
+        white-space: nowrap;
+      }
+
+      nav a:hover {
+        color: #b85c38;
+      }
+
+      .breadcrumb {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.35rem;
+        font-size: 0.85em;
+        color: #888;
+        margin-bottom: 1.25rem;
+      }
+
+      .breadcrumb a {
+        color: #888;
+        text-decoration: none;
+      }
+
+      .breadcrumb a:hover {
+        color: #b85c38;
+        text-decoration: underline;
+      }
+
+      .breadcrumb-sep {
+        color: #ccc;
+      }
+
+      .breadcrumb-current {
+        color: #444;
       }
 
       main {
@@ -41,13 +94,19 @@ const base = import.meta.env.BASE_URL;
         margin: 0 auto;
         padding: 2rem 1.5rem;
       }
+    </style>
 
+    <style is:global>
       @media print {
         header,
+        .breadcrumb,
         .filter-bar,
         #tag-chips,
         .back-link,
-        .no-results {
+        .no-results,
+        .servings-scaler button,
+        #btn-minus,
+        #btn-plus {
           display: none !important;
         }
 
@@ -62,20 +121,7 @@ const base = import.meta.env.BASE_URL;
           padding: 0;
         }
 
-        a {
-          color: inherit;
-          text-decoration: none;
-        }
-      }
-    </style>
-
-    <style is:global>
-      @media print {
-        .servings-scaler button,
-        #btn-minus,
-        #btn-plus {
-          display: none !important;
-        }
+        a { color: inherit; text-decoration: none; }
 
         .recipe-card {
           box-shadow: none !important;
@@ -86,9 +132,27 @@ const base = import.meta.env.BASE_URL;
   </head>
   <body>
     <header>
-      <a href={base}>Recepten</a>
+      <a href={base} class="site-title">Recepten</a>
+      <nav>
+        <a href={`${base}/kids/`}>Voor de kids</a>
+        <a href={`${base}/planner/`}>Weekplanner</a>
+      </nav>
     </header>
+
     <main>
+      {breadcrumbs && breadcrumbs.length > 0 && (
+        <div class="breadcrumb">
+          {breadcrumbs.map((crumb, i) => (
+            <>
+              {i > 0 && <span class="breadcrumb-sep">›</span>}
+              {crumb.href
+                ? <a href={crumb.href}>{crumb.label}</a>
+                : <span class="breadcrumb-current">{crumb.label}</span>
+              }
+            </>
+          ))}
+        </div>
+      )}
       <slot />
     </main>
   </body>
