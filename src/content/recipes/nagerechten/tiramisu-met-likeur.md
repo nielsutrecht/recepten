@@ -7,14 +7,14 @@ tags: ["nagerecht", "italiaans"]
 source: "https://www.ah.nl/allerhande/recept/R-R226102/tiramisu-met-likeur"
 draft: false
 ingredients:
-  - { quantity: 125, unit: "ml", name: "verse slagroom" }
-  - { quantity: 75, unit: "g", name: "witte basterdsuiker" }
-  - { quantity: 4, unit: "stuks", name: "middelgrote scharreleieren" }
-  - { quantity: 500, unit: "g", name: "mascarpone" }
-  - { quantity: 5, unit: "el", name: "koffielikeur" }
-  - { quantity: 200, unit: "ml", name: "espressokoffie" }
-  - { quantity: 175, unit: "g", name: "lange vingers" }
-  - { quantity: 1, unit: "el", name: "cacaopoeder" }
+  - { quantity: 125, unit: "ml", name: "verse slagroom", category: "zuivel en eieren" }
+  - { quantity: 75, unit: "g", name: "witte basterdsuiker", category: "bakken" }
+  - { quantity: 4, unit: "stuks", name: "middelgrote scharreleieren", category: "zuivel en eieren" }
+  - { quantity: 500, unit: "g", name: "mascarpone", category: "zuivel en eieren" }
+  - { quantity: 5, unit: "el", name: "koffielikeur", category: "overig" }
+  - { quantity: 200, unit: "ml", name: "espressokoffie", category: "overig" }
+  - { quantity: 175, unit: "g", name: "lange vingers", category: "bakken" }
+  - { quantity: 1, unit: "el", name: "cacaopoeder", category: "bakken" }
 ---
 
 ## Bereiding

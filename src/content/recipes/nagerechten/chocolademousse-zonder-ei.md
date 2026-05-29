@@ -7,10 +7,10 @@ tags: ["nagerecht", "frans"]
 source: "https://www.ah.nl/allerhande/recept/R-R424720/chocolademousse-zonder-ei"
 draft: false
 ingredients:
-  - { quantity: 100, unit: "ml", name: "halfvolle melk" }
-  - { quantity: 150, unit: "g", name: "pure chocolade" }
-  - { quantity: 200, unit: "ml", name: "verse slagroom" }
-  - { quantity: 50, unit: "g", name: "witte basterdsuiker" }
+  - { quantity: 100, unit: "ml", name: "halfvolle melk", category: "zuivel en eieren" }
+  - { quantity: 150, unit: "g", name: "pure chocolade", category: "bakken" }
+  - { quantity: 200, unit: "ml", name: "verse slagroom", category: "zuivel en eieren" }
+  - { quantity: 50, unit: "g", name: "witte basterdsuiker", category: "bakken" }
 ---
 
 ## Bereiding

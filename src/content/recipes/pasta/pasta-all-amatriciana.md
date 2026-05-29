@@ -8,13 +8,13 @@ tags: ["pasta", "italiaans", "hoofdgerecht"]
 source: "https://www.ah.nl/allerhande/recept/R-R1192701/pasta-all-amatriciana"
 draft: false
 ingredients:
-  - { quantity: 300, unit: "g", name: "spaghetti" }
-  - { quantity: 100, unit: "g", name: "guanciale blokjes" }
-  - { quantity: 2, unit: "stuks", name: "rode uien" }
-  - { quantity: 3, unit: "teentjes", name: "knoflook" }
-  - { quantity: 0.5, unit: "tl", name: "chilivlokken" }
-  - { quantity: 850, unit: "ml", name: "San Marzano tomaten in blik" }
-  - { quantity: 50, unit: "g", name: "Pecorino Romano" }
+  - { quantity: 300, unit: "g", name: "spaghetti", category: "pasta en granen" }
+  - { quantity: 100, unit: "g", name: "guanciale blokjes", category: "vlees en vis" }
+  - { quantity: 2, unit: "stuks", name: "rode uien", category: "groente en fruit" }
+  - { quantity: 3, unit: "teentjes", name: "knoflook", category: "groente en fruit" }
+  - { quantity: 0.5, unit: "tl", name: "chilivlokken", category: "sauzen en kruiden" }
+  - { quantity: 850, unit: "ml", name: "San Marzano tomaten in blik", category: "conserven" }
+  - { quantity: 50, unit: "g", name: "Pecorino Romano", category: "kaas" }
 ---
 
 ## Bereiding

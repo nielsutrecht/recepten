@@ -7,14 +7,14 @@ tags: ["bijgerecht", "salade", "vegetarisch"]
 source: "https://www.fifteenspatulas.com/coleslaw/"
 draft: false
 ingredients:
-  - { quantity: 500, unit: "g", name: "witte kool, fijngesneden" }
-  - { quantity: 200, unit: "g", name: "rode kool, fijngesneden" }
-  - { quantity: 100, unit: "g", name: "wortels, geraspt" }
-  - { quantity: 180, unit: "ml", name: "mayonaise" }
-  - { quantity: 3, unit: "el", name: "appelazijn" }
-  - { quantity: 1, unit: "el", name: "grove mosterd" }
-  - { quantity: 0.5, unit: "tl", name: "zout" }
-  - { quantity: 0.25, unit: "tl", name: "versgemalen zwarte peper" }
+  - { quantity: 500, unit: "g", name: "witte kool, fijngesneden", category: "groente en fruit" }
+  - { quantity: 200, unit: "g", name: "rode kool, fijngesneden", category: "groente en fruit" }
+  - { quantity: 100, unit: "g", name: "wortels, geraspt", category: "groente en fruit" }
+  - { quantity: 180, unit: "ml", name: "mayonaise", category: "sauzen en kruiden" }
+  - { quantity: 3, unit: "el", name: "appelazijn", category: "sauzen en kruiden" }
+  - { quantity: 1, unit: "el", name: "grove mosterd", category: "sauzen en kruiden" }
+  - { quantity: 0.5, unit: "tl", name: "zout", category: "sauzen en kruiden" }
+  - { quantity: 0.25, unit: "tl", name: "versgemalen zwarte peper", category: "sauzen en kruiden" }
 ---
 
 ## Bereiding

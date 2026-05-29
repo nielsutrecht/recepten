@@ -8,9 +8,9 @@ tags: ["bijgerecht", "saus", "vegetarisch"]
 source: "https://www.ah.nl/allerhande/recept/R-R911218/frambozencoulis"
 draft: false
 ingredients:
-  - { quantity: 2, unit: "el", name: "water" }
-  - { quantity: 100, unit: "g", name: "fijne kristalsuiker" }
-  - { quantity: 250, unit: "g", name: "diepvries frambozen" }
+  - { quantity: 2, unit: "el", name: "water", category: "overig" }
+  - { quantity: 100, unit: "g", name: "fijne kristalsuiker", category: "bakken" }
+  - { quantity: 250, unit: "g", name: "diepvries frambozen", category: "groente en fruit" }
 ---
 
 ## Bereiding

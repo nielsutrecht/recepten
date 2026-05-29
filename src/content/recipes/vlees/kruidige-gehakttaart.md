@@ -8,13 +8,13 @@ tags: ["oven", "indonesisch", "hoofdgerecht"]
 source: "https://www.ah.nl/allerhande/recept/R-R245042/kruidige-gehakttaart"
 draft: false
 ingredients:
-  - { quantity: 50, unit: "g", name: "mix voor nasi goreng" }
-  - { quantity: 5, unit: "plakjes", name: "deeg voor hartige taart" }
-  - { quantity: 2, unit: "el", name: "zonnebloemolie" }
-  - { quantity: 500, unit: "g", name: "rundergehakt" }
-  - { quantity: 400, unit: "g", name: "Chinese roerbakmix" }
-  - { quantity: 4, unit: "stuks", name: "middelgrote scharreleieren" }
-  - { quantity: 250, unit: "ml", name: "verse slagroom" }
+  - { quantity: 50, unit: "g", name: "mix voor nasi goreng", category: "sauzen en kruiden" }
+  - { quantity: 5, unit: "plakjes", name: "deeg voor hartige taart", category: "bakken" }
+  - { quantity: 2, unit: "el", name: "zonnebloemolie", category: "sauzen en kruiden" }
+  - { quantity: 500, unit: "g", name: "rundergehakt", category: "vlees en vis" }
+  - { quantity: 400, unit: "g", name: "Chinese roerbakmix", category: "groente en fruit" }
+  - { quantity: 4, unit: "stuks", name: "middelgrote scharreleieren", category: "zuivel en eieren" }
+  - { quantity: 250, unit: "ml", name: "verse slagroom", category: "zuivel en eieren" }
 ---
 
 ## Bereiding

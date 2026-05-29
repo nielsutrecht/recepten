@@ -8,18 +8,18 @@ tags: ["pasta", "oven", "hoofdgerecht"]
 source: "https://www.ah.nl/allerhande/recept/R-R1201468/lasagne-met-kipgehakt-spinazie-en-courgette-advertorial"
 draft: false
 ingredients:
-  - { quantity: 1, unit: "stuks", name: "middelgrote ui" }
-  - { quantity: 2, unit: "teentjes", name: "knoflook" }
-  - { quantity: 3, unit: "el", name: "milde olijfolie" }
-  - { quantity: 300, unit: "g", name: "scharrelkipgehakt" }
-  - { quantity: 800, unit: "g", name: "Mutti polpa in blik" }
-  - { quantity: 75, unit: "g", name: "Parmezaanse kaas" }
-  - { quantity: 400, unit: "g", name: "verse spinazie" }
-  - { quantity: 250, unit: "g", name: "mascarpone" }
-  - { quantity: 1, unit: "stuks", name: "courgette" }
-  - { quantity: 0.5, unit: "el", name: "gedroogde Italiaanse kruiden" }
-  - { quantity: 250, unit: "g", name: "koelverse lasagnebladen" }
-  - { quantity: 200, unit: "g", name: "mozzarella" }
+  - { quantity: 1, unit: "stuks", name: "middelgrote ui", category: "groente en fruit" }
+  - { quantity: 2, unit: "teentjes", name: "knoflook", category: "groente en fruit" }
+  - { quantity: 3, unit: "el", name: "milde olijfolie", category: "sauzen en kruiden" }
+  - { quantity: 300, unit: "g", name: "scharrelkipgehakt", category: "vlees en vis" }
+  - { quantity: 800, unit: "g", name: "Mutti polpa in blik", category: "conserven" }
+  - { quantity: 75, unit: "g", name: "Parmezaanse kaas", category: "kaas" }
+  - { quantity: 400, unit: "g", name: "verse spinazie", category: "groente en fruit" }
+  - { quantity: 250, unit: "g", name: "mascarpone", category: "zuivel en eieren" }
+  - { quantity: 1, unit: "stuks", name: "courgette", category: "groente en fruit" }
+  - { quantity: 0.5, unit: "el", name: "gedroogde Italiaanse kruiden", category: "sauzen en kruiden" }
+  - { quantity: 250, unit: "g", name: "koelverse lasagnebladen", category: "pasta en granen" }
+  - { quantity: 200, unit: "g", name: "mozzarella", category: "kaas" }
 ---
 
 ## Bereiding

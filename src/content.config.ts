@@ -3,6 +3,18 @@ import { glob } from 'astro/loaders';
 
 const ratingEmoji = z.enum(['😍', '😊', '😐', '😒', '🤢']);
 
+const ingredientCategory = z.enum([
+  'groente en fruit',
+  'vlees en vis',
+  'zuivel en eieren',
+  'kaas',
+  'pasta en granen',
+  'sauzen en kruiden',
+  'conserven',
+  'bakken',
+  'overig',
+]);
+
 const recipes = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/recipes' }),
   schema: z.object({
@@ -26,6 +38,7 @@ const recipes = defineCollection({
         quantity: z.number().positive(),
         unit: z.string(),
         name: z.string(),
+        category: ingredientCategory.optional(),
       })
     ),
   }),

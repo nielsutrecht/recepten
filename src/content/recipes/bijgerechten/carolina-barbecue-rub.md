@@ -7,14 +7,14 @@ tags: ["bbq", "rub", "vlees"]
 source: "https://bbq-helden.nl/recepten/carolina-barbecue-rub/"
 draft: false
 ingredients:
-  - { quantity: 2, unit: "el", name: "zout" }
-  - { quantity: 2, unit: "el", name: "suiker" }
-  - { quantity: 2, unit: "el", name: "bruine suiker" }
-  - { quantity: 2, unit: "el", name: "gemalen komijn" }
-  - { quantity: 2, unit: "el", name: "chilipoeder" }
-  - { quantity: 2, unit: "el", name: "gemalen zwarte peper" }
-  - { quantity: 1, unit: "el", name: "cayennepeper" }
-  - { quantity: 4, unit: "el", name: "paprikapoeder" }
+  - { quantity: 2, unit: "el", name: "zout", category: "sauzen en kruiden" }
+  - { quantity: 2, unit: "el", name: "suiker", category: "bakken" }
+  - { quantity: 2, unit: "el", name: "bruine suiker", category: "bakken" }
+  - { quantity: 2, unit: "el", name: "gemalen komijn", category: "sauzen en kruiden" }
+  - { quantity: 2, unit: "el", name: "chilipoeder", category: "sauzen en kruiden" }
+  - { quantity: 2, unit: "el", name: "gemalen zwarte peper", category: "sauzen en kruiden" }
+  - { quantity: 1, unit: "el", name: "cayennepeper", category: "sauzen en kruiden" }
+  - { quantity: 4, unit: "el", name: "paprikapoeder", category: "sauzen en kruiden" }
 ---
 
 ## Bereiding

@@ -8,10 +8,10 @@ tags: ["nagerecht", "italiaans"]
 source: "https://www.ah.nl/allerhande/recept/R-R742050/panna-cotta-classica"
 draft: false
 ingredients:
-  - { quantity: 1, unit: "stuks", name: "vanillestokje" }
-  - { quantity: 50, unit: "g", name: "fijne kristalsuiker" }
-  - { quantity: 500, unit: "ml", name: "verse slagroom" }
-  - { quantity: 3, unit: "blaadjes", name: "gelatine" }
+  - { quantity: 1, unit: "stuks", name: "vanillestokje", category: "bakken" }
+  - { quantity: 50, unit: "g", name: "fijne kristalsuiker", category: "bakken" }
+  - { quantity: 500, unit: "ml", name: "verse slagroom", category: "zuivel en eieren" }
+  - { quantity: 3, unit: "blaadjes", name: "gelatine", category: "bakken" }
 ---
 
 ## Bereiding

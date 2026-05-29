@@ -53,11 +53,25 @@ If any method finds partial data, use it and apply judgment for missing fields.
 
 ### 3. Parse ingredient strings into structured objects
 
-Each ingredient string → `{ quantity, unit, name }`:
+Each ingredient string → `{ quantity, unit, name, category }`:
 - First token(s) = quantity (number; convert fractions: `½`→`0.5`, `¼`→`0.25`, `¾`→`0.75`)
 - Next token = unit (`g`, `ml`, `el`, `tl`, `kg`, `l`, `stuks`, `teentjes`, `plakjes`, `blaadjes`, `eetlepels`→`el`, `theelepels`→`tl`, etc.)
 - If no recognisable unit follows the quantity, use `"stuks"`
 - Remainder = name
+- `category` = auto-assigned from lookup table below (default `"overig"` if no match)
+
+**Ingredient category lookup table** (match against lowercase ingredient name, first match wins):
+
+| Name contains | Category |
+|---|---|
+| ui, knoflook, wortel, kool, sla, spinazie, tomaat, tomaten, paprika, courgette, aubergine, broccoli, bloemkool, champignon, aardappel, prei, selderij, venkel, asperge, erwten, bonen, maïs, avocado, appel, peer, citroen, limoen, sinaasappel, banaan, aardbei, framboz, blauwe bes, mango, ananas, druif, fruit, groente, verse kruiden, peterselie, basilicum, koriander, bieslook, rozemarijn, tijm, salie | `groente en fruit` |
+| rundvlees, rundergehakt, gehakt, kipgehakt, kipfilet, kip, varkensvlees, spek, ham, bacon, guanciale, pancetta, chorizo, salami, worst, lamsvlees, tartaar, biefstuk, gehaktbal, vis, zalm, kabeljauw, tonijn, garnalen, mosselen, inktvis | `vlees en vis` |
+| melk, slagroom, yoghurt, kwark, crème fraîche, boter, roomboter, margarine, ei, eieren, mascarpone | `zuivel en eieren` |
+| kaas, parmezaan, mozzarella, pecorino, gruyère, cheddar, gouda, feta, ricotta, brie, camembert | `kaas` |
+| pasta, spaghetti, penne, fusilli, tagliatelle, lasagne, gnocchi, rijst, couscous, bulgur, quinoa, meel, bloem, brood, beschuit, lange vingers, crackers, panko, broodkruim | `pasta en granen` |
+| olie, olijfolie, zonnebloemolie, azijn, mosterd, sojasaus, worcestershire, tabasco, sambal, ketchup, mayonaise, pesto, tomatenpuree, bouillon, stroop, suiker (when combined with other spices), zout, peper, paprikapoeder, komijn, kaneel, kardemom, nootmuskaat, kurkuma, korianderzaad, chili, cayenne, curry, oregano, basilicum (dried), kruiden (dried), specerijen | `sauzen en kruiden` |
+| blik, pot, ingeblikt, gepeld, polpa, passata, kokosmelk, kikkererwten, linzen, bruine bonen, mais (blik) | `conserven` |
+| suiker, basterdsuiker, kristalsuiker, poedersuiker, vanille, vanillestokje, cacao, cacaopoeder, chocolade, honing, bakmeel, zelfrijzend, gist, bakpoeder, gelatine, maizena, kokosnoot, marsepein, speculaaskruiden, deeg | `bakken` |
 
 ### 4. Determine timing
 
@@ -91,7 +105,7 @@ tags: [<tag1>, <tag2>]
 source: "<url>"
 draft: false
 ingredients:
-  - { quantity: <n>, unit: "<unit>", name: "<name>" }
+  - { quantity: <n>, unit: "<unit>", name: "<name>", category: "<category>" }
 ---
 
 ## Bereiding

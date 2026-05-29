@@ -8,12 +8,12 @@ tags: ["bijgerecht", "vegetarisch", "glutenvrij"]
 source: "https://www.ah.nl/allerhande/recept/R-R1186468/perfecte-aardappelpuree"
 draft: false
 ingredients:
-  - { quantity: 1, unit: "kg", name: "kruimige aardappels" }
-  - { quantity: 1, unit: "el", name: "extra vierge olijfolie" }
-  - { quantity: 150, unit: "ml", name: "volle melk" }
-  - { quantity: 100, unit: "g", name: "ongezouten roomboter" }
-  - { quantity: 0.5, unit: "tl", name: "zout" }
-  - { quantity: 0.25, unit: "tl", name: "gemalen nootmuskaat" }
+  - { quantity: 1, unit: "kg", name: "kruimige aardappels", category: "groente en fruit" }
+  - { quantity: 1, unit: "el", name: "extra vierge olijfolie", category: "sauzen en kruiden" }
+  - { quantity: 150, unit: "ml", name: "volle melk", category: "zuivel en eieren" }
+  - { quantity: 100, unit: "g", name: "ongezouten roomboter", category: "zuivel en eieren" }
+  - { quantity: 0.5, unit: "tl", name: "zout", category: "sauzen en kruiden" }
+  - { quantity: 0.25, unit: "tl", name: "gemalen nootmuskaat", category: "sauzen en kruiden" }
 ---
 
 ## Bereiding

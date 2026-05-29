@@ -8,17 +8,17 @@ tags: ["bbq", "saus", "bijgerecht"]
 source: "https://bbq-helden.nl/hoe-maak-je-barbecuesaus/"
 draft: false
 ingredients:
-  - { quantity: 2, unit: "el", name: "plantaardige olie" }
-  - { quantity: 1, unit: "stuks", name: "ui, fijngesnipperd" }
-  - { quantity: 2, unit: "teentjes", name: "knoflook, fijngehakt" }
-  - { quantity: 0.5, unit: "tl", name: "Worcestershiresaus" }
-  - { quantity: 1, unit: "tl", name: "gemalen zwarte peper" }
-  - { quantity: 1, unit: "tl", name: "chilipoeder" }
-  - { quantity: 4, unit: "el", name: "bruine suiker" }
-  - { quantity: 4, unit: "el", name: "stroop" }
-  - { quantity: 800, unit: "ml", name: "ketchup" }
-  - { quantity: 1, unit: "el", name: "mosterd" }
-  - { quantity: 2, unit: "el", name: "azijn (bij voorkeur appelazijn)" }
+  - { quantity: 2, unit: "el", name: "plantaardige olie", category: "sauzen en kruiden" }
+  - { quantity: 1, unit: "stuks", name: "ui, fijngesnipperd", category: "groente en fruit" }
+  - { quantity: 2, unit: "teentjes", name: "knoflook, fijngehakt", category: "groente en fruit" }
+  - { quantity: 0.5, unit: "tl", name: "Worcestershiresaus", category: "sauzen en kruiden" }
+  - { quantity: 1, unit: "tl", name: "gemalen zwarte peper", category: "sauzen en kruiden" }
+  - { quantity: 1, unit: "tl", name: "chilipoeder", category: "sauzen en kruiden" }
+  - { quantity: 4, unit: "el", name: "bruine suiker", category: "bakken" }
+  - { quantity: 4, unit: "el", name: "stroop", category: "bakken" }
+  - { quantity: 800, unit: "ml", name: "ketchup", category: "conserven" }
+  - { quantity: 1, unit: "el", name: "mosterd", category: "sauzen en kruiden" }
+  - { quantity: 2, unit: "el", name: "azijn (bij voorkeur appelazijn)", category: "sauzen en kruiden" }
 ---
 
 ## Bereiding

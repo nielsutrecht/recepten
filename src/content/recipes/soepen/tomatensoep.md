@@ -10,14 +10,14 @@ ratings:
   annemijn: "😊"
 draft: false
 ingredients:
-  - { quantity: 800, unit: "g", name: "gepelde tomaten (blik)" }
-  - { quantity: 1, unit: "el", name: "olijfolie" }
-  - { quantity: 1, unit: "stuk", name: "ui, grofgehakt" }
-  - { quantity: 2, unit: "teentjes", name: "knoflook" }
-  - { quantity: 500, unit: "ml", name: "groentebouillon" }
-  - { quantity: 1, unit: "tl", name: "suiker" }
-  - { quantity: 0.5, unit: "tl", name: "zout" }
-  - { quantity: 2, unit: "el", name: "crème fraîche" }
+  - { quantity: 800, unit: "g", name: "gepelde tomaten (blik)", category: "conserven" }
+  - { quantity: 1, unit: "el", name: "olijfolie", category: "sauzen en kruiden" }
+  - { quantity: 1, unit: "stuk", name: "ui, grofgehakt", category: "groente en fruit" }
+  - { quantity: 2, unit: "teentjes", name: "knoflook", category: "groente en fruit" }
+  - { quantity: 500, unit: "ml", name: "groentebouillon", category: "conserven" }
+  - { quantity: 1, unit: "tl", name: "suiker", category: "bakken" }
+  - { quantity: 0.5, unit: "tl", name: "zout", category: "sauzen en kruiden" }
+  - { quantity: 2, unit: "el", name: "crème fraîche", category: "zuivel en eieren" }
 ---
 
 ## Bereiding
