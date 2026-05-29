@@ -1,0 +1,609 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+
+const base = import.meta.env.BASE_URL;
+
+const allRecipes = await getCollection('recipes', (r) => !r.data.draft);
+
+const recipeData = allRecipes
+  .sort((a, b) => a.data.title.localeCompare(b.data.title, 'nl'))
+  .map((r) => ({
+    id: r.id,
+    title: r.data.title,
+    servings: r.data.servings,
+    prepTime: r.data.prepTime,
+    cookTime: r.data.cookTime ?? 0,
+    tags: r.data.tags,
+    ingredients: r.data.ingredients.map((ing) => ({
+      name: ing.name,
+      unit: ing.unit,
+      quantity: ing.quantity,
+      category: ing.category ?? 'overig',
+    })),
+  }));
+---
+
+<Base
+  title="Weekplanner"
+  breadcrumbs={[{ label: 'Recepten', href: base }, { label: 'weekplanner' }]}
+>
+  <h1>Weekplanner</h1>
+
+  <div class="week-grid" id="week-grid"></div>
+
+  <div class="plan-actions">
+    <button id="btn-clear-plan" class="btn-clear">Plan wissen</button>
+  </div>
+
+  <hr class="divider" />
+
+  <section>
+    <div class="shopping-header">
+      <h2>Boodschappenlijst</h2>
+      <button class="btn-print" onclick="window.print()">🖨 Printen</button>
+    </div>
+    <div id="shopping-content"></div>
+  </section>
+
+  <dialog id="recipe-picker">
+    <div class="picker-header">
+      <input type="search" id="picker-search" placeholder="Zoek een recept…" autocomplete="off" />
+      <button id="picker-close" aria-label="Sluiten">✕</button>
+    </div>
+    <div id="picker-grid" class="picker-grid"></div>
+  </dialog>
+</Base>
+
+<style is:global>
+  h1 { margin-bottom: 1.5rem; }
+  h2 { font-size: 1.1rem; margin: 0 0 1rem; }
+
+  /* ── Week grid ── */
+  .week-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .day-section {
+    border: 1px solid #e8e4df;
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    background: #fff;
+  }
+
+  .day-name {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 0.6rem;
+  }
+
+  .recipe-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.35rem 0;
+    border-top: 1px solid #f0ece6;
+  }
+
+  .recipe-link {
+    flex: 1;
+    font-weight: 600;
+    color: #b85c38;
+    text-decoration: none;
+    font-size: 0.95rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+  }
+
+  .recipe-link:hover { text-decoration: underline; }
+
+  .slot-scaler {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    flex-shrink: 0;
+  }
+
+  .slot-scaler button {
+    width: 1.75rem;
+    height: 1.75rem;
+    border: 1px solid #d0cbc5;
+    border-radius: 4px;
+    background: #f7f5f2;
+    cursor: pointer;
+    font-size: 1rem;
+    line-height: 1;
+    font-family: inherit;
+    touch-action: manipulation;
+  }
+
+  .slot-scaler button:hover { border-color: #b85c38; }
+
+  .slot-servings {
+    min-width: 1.5rem;
+    text-align: center;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #555;
+  }
+
+  .btn-remove {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #ccc;
+    padding: 0.2rem 0.3rem;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+  }
+
+  .btn-remove:hover { color: #b85c38; }
+
+  .btn-assign {
+    margin-top: 0.35rem;
+    background: none;
+    border: 1px dashed #d0cbc5;
+    border-radius: 6px;
+    padding: 0.3rem 0.75rem;
+    font-size: 0.82rem;
+    color: #aaa;
+    cursor: pointer;
+    font-family: inherit;
+    width: 100%;
+    text-align: left;
+  }
+
+  .btn-assign:hover { border-color: #b85c38; color: #b85c38; }
+
+  /* ── Actions ── */
+  .plan-actions { margin-bottom: 1.5rem; }
+
+  .btn-clear {
+    background: none;
+    border: 1px solid #e0ccc5;
+    border-radius: 6px;
+    padding: 0.4rem 0.875rem;
+    font-size: 0.85rem;
+    color: #888;
+    cursor: pointer;
+    font-family: inherit;
+  }
+
+  .btn-clear:hover { border-color: #b85c38; color: #b85c38; }
+
+  .divider { border: none; border-top: 1px solid #e8e4df; margin: 0 0 1.5rem; }
+
+  /* ── Shopping list ── */
+  .shopping-empty { color: #888; font-size: 0.95rem; }
+
+  .shopping-category { margin-bottom: 1.25rem; }
+
+  .category-heading {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #888;
+    margin: 0 0 0.5rem;
+  }
+
+  .shopping-item {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    padding: 0.2rem 0;
+    font-size: 0.95rem;
+  }
+
+  .shopping-item input[type="checkbox"] { flex-shrink: 0; cursor: pointer; }
+
+  .item-text { flex: 1; }
+
+  .item-done .item-text { text-decoration: line-through; color: #aaa; }
+
+  .item-sources { font-size: 0.8em; color: #aaa; flex-shrink: 0; }
+
+  /* ── Recipe picker dialog ── */
+  #recipe-picker {
+    border: none;
+    border-radius: 10px;
+    padding: 0;
+    width: min(600px, 92vw);
+    max-height: 80vh;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+  }
+
+  #recipe-picker[open] {
+    display: flex;
+    flex-direction: column;
+  }
+
+  #recipe-picker::backdrop { background: rgba(0,0,0,0.4); }
+
+  .picker-header {
+    display: flex;
+    gap: 0.5rem;
+    padding: 0.875rem 1rem;
+    border-bottom: 1px solid #e8e4df;
+    flex-shrink: 0;
+  }
+
+  #picker-search {
+    flex: 1;
+    padding: 0.45rem 0.75rem;
+    border: 1px solid #d0cbc5;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-family: inherit;
+    outline: none;
+  }
+
+  #picker-search:focus { border-color: #b85c38; }
+
+  #picker-close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.1rem;
+    color: #888;
+    padding: 0 0.4rem;
+  }
+
+  #picker-close:hover { color: #b85c38; }
+
+  .picker-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+    padding: 0.875rem 1rem;
+    overflow-y: auto;
+    flex: 1;
+  }
+
+  .picker-card {
+    border: 1px solid #e8e4df;
+    border-radius: 8px;
+    padding: 0.75rem;
+    cursor: pointer;
+    background: #fff;
+    text-align: left;
+    font-family: inherit;
+  }
+
+  .picker-card:hover { border-color: #b85c38; }
+
+  .picker-card-title {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #1a1a1a;
+    display: block;
+    margin-bottom: 0.2rem;
+  }
+
+  .picker-card-meta { font-size: 0.78rem; color: #888; }
+
+  .picker-card[hidden] { display: none; }
+
+  /* ── Shopping header ── */
+  .shopping-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .shopping-header h2 { margin: 0; }
+
+  .btn-print {
+    background: none;
+    border: 1px solid #d0cbc5;
+    border-radius: 6px;
+    padding: 0.3rem 0.75rem;
+    font-size: 0.82rem;
+    color: #666;
+    cursor: pointer;
+    font-family: inherit;
+  }
+
+  .btn-print:hover { border-color: #b85c38; color: #b85c38; }
+
+  /* ── Print ── */
+  @media print {
+    .week-grid,
+    .plan-actions,
+    .divider,
+    .btn-print,
+    h1 { display: none !important; }
+
+    #shopping-content {
+      columns: 2;
+      column-gap: 2rem;
+      font-size: 10pt;
+    }
+
+    .shopping-category {
+      break-inside: avoid;
+      margin-bottom: 0.75rem;
+    }
+
+    .category-heading {
+      font-size: 8pt;
+      margin-bottom: 3pt;
+    }
+
+    .shopping-item { padding: 1pt 0; }
+
+    .item-sources { display: none; }
+  }
+</style>
+
+<script define:vars={{ recipeData, base }}>
+  const STORAGE_KEY = 'recepten-planner-v1';
+  const DEFAULT_SERVINGS = 4;
+
+  const DAYS = [
+    { key: 'ma', label: 'Maandag' },
+    { key: 'di', label: 'Dinsdag' },
+    { key: 'wo', label: 'Woensdag' },
+    { key: 'do', label: 'Donderdag' },
+    { key: 'vr', label: 'Vrijdag' },
+    { key: 'za', label: 'Zaterdag' },
+    { key: 'zo', label: 'Zondag' },
+  ];
+
+  const CATEGORY_ORDER = [
+    'groente en fruit', 'vlees en vis', 'zuivel en eieren', 'kaas',
+    'pasta en granen', 'conserven', 'sauzen en kruiden', 'bakken', 'overig',
+  ];
+
+  const FRACTIONS = { '0.25': '¼', '0.5': '½', '0.75': '¾', '0.33': '⅓', '0.67': '⅔' };
+
+  const TRASH_ICON = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/>
+  </svg>`;
+
+  function roundKitchen(value) {
+    let rounded;
+    if (value >= 100) rounded = Math.round(value / 10) * 10;
+    else if (value >= 20) rounded = Math.round(value / 5) * 5;
+    else if (value >= 5) rounded = Math.round(value);
+    else if (value >= 1) rounded = Math.round(value * 2) / 2;
+    else {
+      rounded = Math.round(value * 4) / 4;
+      const key = rounded.toFixed(2).replace(/\.?0+$/, '');
+      if (FRACTIONS[key]) return FRACTIONS[key];
+    }
+    return rounded % 1 === 0 ? String(rounded) : String(rounded);
+  }
+
+  function esc(str) {
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  // ── State ──────────────────────────────────────────
+
+  function emptyState() {
+    return {
+      days: Object.fromEntries(DAYS.map(d => [d.key, []])),
+      checkedItems: [],
+    };
+  }
+
+  function loadState() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        // Migrate from old single-recipe format
+        const days = parsed.days || {};
+        const needsMigration = Object.values(days).some(d => d && !Array.isArray(d));
+        if (needsMigration) return emptyState();
+        const fresh = emptyState();
+        for (const key of Object.keys(fresh.days)) {
+          if (Array.isArray(days[key])) fresh.days[key] = days[key];
+        }
+        fresh.checkedItems = Array.isArray(parsed.checkedItems) ? parsed.checkedItems : [];
+        return fresh;
+      }
+    } catch {}
+    return emptyState();
+  }
+
+  function saveState(state) {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch {}
+  }
+
+  // ── Shopping list ──────────────────────────────────
+
+  function buildShoppingList(state) {
+    const items = new Map();
+    for (const { key: dayKey } of DAYS) {
+      for (const plan of state.days[dayKey]) {
+        const recipe = recipeData.find(r => r.id === plan.recipeId);
+        if (!recipe) continue;
+        const scale = plan.servings / recipe.servings;
+        for (const ing of recipe.ingredients) {
+          const key = `${ing.name}:${ing.unit}`;
+          const qty = ing.quantity * scale;
+          if (items.has(key)) {
+            const item = items.get(key);
+            item.quantity += qty;
+            if (!item.sources.includes(recipe.title)) item.sources.push(recipe.title);
+          } else {
+            items.set(key, { key, name: ing.name, unit: ing.unit, category: ing.category, quantity: qty, sources: [recipe.title] });
+          }
+        }
+      }
+    }
+    const byCategory = {};
+    for (const item of items.values()) {
+      const cat = item.category || 'overig';
+      if (!byCategory[cat]) byCategory[cat] = [];
+      byCategory[cat].push(item);
+    }
+    return byCategory;
+  }
+
+  // ── Render ─────────────────────────────────────────
+
+  function renderGrid(state) {
+    const grid = document.getElementById('week-grid');
+    grid.innerHTML = DAYS.map(({ key, label }) => {
+      const plans = state.days[key];
+      const recipeRows = plans.map((plan, idx) => {
+        const recipe = recipeData.find(r => r.id === plan.recipeId);
+        if (!recipe) return '';
+        const recipeUrl = `${base}/${esc(recipe.id)}/`;
+        return `<div class="recipe-row">
+          <a class="recipe-link" href="${recipeUrl}" target="_blank" rel="noopener">${esc(recipe.title)}</a>
+          <div class="slot-scaler">
+            <button data-action="minus" data-day="${key}" data-index="${idx}" aria-label="Minder">−</button>
+            <span class="slot-servings">${plan.servings}</span>
+            <button data-action="plus" data-day="${key}" data-index="${idx}" aria-label="Meer">+</button>
+          </div>
+          <button class="btn-remove" data-action="remove" data-day="${key}" data-index="${idx}" aria-label="Verwijder">${TRASH_ICON}</button>
+        </div>`;
+      }).join('');
+
+      return `<div class="day-section">
+        <div class="day-name">${label}</div>
+        ${recipeRows}
+        <button class="btn-assign" data-action="assign" data-day="${key}">+ kies recept</button>
+      </div>`;
+    }).join('');
+  }
+
+  function renderShoppingList(state) {
+    const container = document.getElementById('shopping-content');
+    const byCategory = buildShoppingList(state);
+    const checkedSet = new Set(state.checkedItems);
+    const hasItems = Object.keys(byCategory).length > 0;
+
+    if (!hasItems) {
+      container.innerHTML = '<p class="shopping-empty">Voeg recepten toe aan de weekplanner om een boodschappenlijst te genereren.</p>';
+      return;
+    }
+
+    const orderedCats = CATEGORY_ORDER.filter(c => byCategory[c]);
+    container.innerHTML = orderedCats.map(cat => {
+      const items = byCategory[cat].map(item => {
+        const checked = checkedSet.has(item.key);
+        const qty = roundKitchen(item.quantity);
+        const sources = item.sources.join(', ');
+        return `<div class="shopping-item${checked ? ' item-done' : ''}">
+          <input type="checkbox" data-item-key="${esc(item.key)}" ${checked ? 'checked' : ''}>
+          <span class="item-text">${qty} ${esc(item.unit)} ${esc(item.name)}</span>
+          <span class="item-sources">(${esc(sources)})</span>
+        </div>`;
+      }).join('');
+      return `<div class="shopping-category">
+        <p class="category-heading">${esc(cat)}</p>
+        ${items}
+      </div>`;
+    }).join('');
+  }
+
+  function renderAll(state) {
+    renderGrid(state);
+    renderShoppingList(state);
+  }
+
+  // ── Picker ─────────────────────────────────────────
+
+  const dialog = document.getElementById('recipe-picker');
+  const pickerGrid = document.getElementById('picker-grid');
+  const pickerSearch = document.getElementById('picker-search');
+  let pendingDay = null;
+
+  pickerGrid.innerHTML = recipeData.map(r => {
+    const time = r.prepTime + r.cookTime;
+    return `<button class="picker-card" data-recipe-id="${esc(r.id)}">
+      <span class="picker-card-title">${esc(r.title)}</span>
+      <span class="picker-card-meta">${time} min</span>
+    </button>`;
+  }).join('');
+
+  function openPicker(day) {
+    pendingDay = day;
+    pickerSearch.value = '';
+    pickerGrid.querySelectorAll('.picker-card').forEach(c => c.hidden = false);
+    dialog.showModal();
+    pickerSearch.focus();
+  }
+
+  pickerSearch.addEventListener('input', () => {
+    const q = pickerSearch.value.toLowerCase();
+    pickerGrid.querySelectorAll('.picker-card').forEach(card => {
+      const title = card.querySelector('.picker-card-title').textContent.toLowerCase();
+      card.hidden = q.length > 0 && !title.includes(q);
+    });
+  });
+
+  document.getElementById('picker-close').addEventListener('click', () => dialog.close());
+  dialog.addEventListener('click', e => { if (e.target === dialog) dialog.close(); });
+
+  pickerGrid.addEventListener('click', e => {
+    const card = e.target.closest('.picker-card');
+    if (!card || !pendingDay) return;
+    state.days[pendingDay].push({ recipeId: card.dataset.recipeId, servings: DEFAULT_SERVINGS });
+    saveState(state);
+    renderAll(state);
+    dialog.close();
+  });
+
+  // ── Grid event delegation ──────────────────────────
+
+  document.getElementById('week-grid').addEventListener('click', e => {
+    const btn = e.target.closest('[data-action]');
+    if (!btn) return;
+    const { action, day } = btn.dataset;
+    const idx = parseInt(btn.dataset.index ?? '0', 10);
+
+    if (action === 'assign') {
+      openPicker(day);
+    } else if (action === 'minus') {
+      state.days[day][idx].servings = Math.max(1, state.days[day][idx].servings - 1);
+      saveState(state); renderAll(state);
+    } else if (action === 'plus') {
+      state.days[day][idx].servings += 1;
+      saveState(state); renderAll(state);
+    } else if (action === 'remove') {
+      state.days[day].splice(idx, 1);
+      saveState(state); renderAll(state);
+    }
+  });
+
+  // ── Shopping list checkboxes ───────────────────────
+
+  document.getElementById('shopping-content').addEventListener('change', e => {
+    const cb = e.target.closest('input[type="checkbox"]');
+    if (!cb) return;
+    const key = cb.dataset.itemKey;
+    const set = new Set(state.checkedItems);
+    if (cb.checked) set.add(key); else set.delete(key);
+    state.checkedItems = [...set];
+    saveState(state);
+    cb.closest('.shopping-item').classList.toggle('item-done', cb.checked);
+  });
+
+  // ── Clear plan ─────────────────────────────────────
+
+  document.getElementById('btn-clear-plan').addEventListener('click', () => {
+    state = emptyState();
+    saveState(state);
+    renderAll(state);
+  });
+
+  // ── Init ───────────────────────────────────────────
+
+  let state = loadState();
+  renderAll(state);
+</script>
