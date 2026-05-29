@@ -23,7 +23,7 @@ Each recipe must have all required frontmatter fields as defined in `src/content
 - `cookTime`, `tags`, `source`, `ratings`, `draft` (optional)
 - `ingredients` array: `{ quantity: number, unit: string, name: string }[]`
 
-All quantities **metric**. Recipe body uses `## Bereiding` for method steps.
+All quantities **metric**. Recipe body uses `## Bereiding` for method steps. All tags **lowercase** (e.g. `"italiaans"` not `"Italiaans"`).
 
 Kids rating emojis: 😍 😊 😐 😒 🤢 (for Emma and Annemijn).
 

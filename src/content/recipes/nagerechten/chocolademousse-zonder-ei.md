@@ -3,7 +3,7 @@ title: "Chocolademousse zonder ei"
 pubDate: 2026-05-29
 servings: 4
 prepTime: 20
-tags: ["nagerecht", "Frans"]
+tags: ["nagerecht", "frans"]
 source: "https://www.ah.nl/allerhande/recept/R-R424720/chocolademousse-zonder-ei"
 draft: false
 ingredients:
