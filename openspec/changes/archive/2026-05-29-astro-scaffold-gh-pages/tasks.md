@@ -33,7 +33,7 @@
 
 ## 6. Verify End-to-End
 
-- [ ] 6.1 Run `npm run dev` and confirm the home page loads at `localhost:4321/recepten/` showing tomatensoep
-- [ ] 6.2 Click through to the recipe detail page and confirm all metadata, ingredients, and body render correctly
+- [x] 6.1 Run `npm run dev` and confirm the home page loads at `localhost:4321/recepten/` showing tomatensoep
+- [x] 6.2 Click through to the recipe detail page and confirm all metadata, ingredients, and body render correctly
 - [x] 6.3 Run `npm run build` and confirm it exits cleanly with no type or schema errors
-- [ ] 6.4 Push to `main`, then in GitHub repo Settings → Pages → set Source to **GitHub Actions**, and confirm the Actions workflow completes and the site is live at `https://nielsutrecht.github.io/recepten/`
+- [x] 6.4 Push to `main`, then in GitHub repo Settings → Pages → set Source to **GitHub Actions**, and confirm the Actions workflow completes and the site is live at `https://nielsutrecht.github.io/recepten/`
