@@ -1,0 +1,62 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../layouts/Base.astro';
+
+export async function getStaticPaths() {
+  const recipes = await getCollection('recipes', (r) => !r.data.draft);
+  return recipes.map((recipe) => ({
+    params: { slug: recipe.id },
+    props: { recipe },
+  }));
+}
+
+const { recipe } = Astro.props;
+const { data } = recipe;
+const { Content } = await render(recipe);
+
+function formatDate(date: Date): string {
+  return date.toLocaleDateString('nl-NL', { year: 'numeric', month: 'long', day: 'numeric' });
+}
+
+const ratingNames: Record<string, string> = { emma: 'Emma', annemijn: 'Annemijn' };
+---
+
+<Base title={data.title}>
+  <h1>{data.title}</h1>
+
+  <div style="color: #666; font-size: 0.9em; margin-bottom: 1.5rem; display: flex; flex-wrap: wrap; gap: 1rem;">
+    <span>Bereidingstijd: {data.prepTime} min{data.cookTime ? ` + ${data.cookTime} min` : ''}</span>
+    <span>Porties: {data.servings}</span>
+    {data.source && <span>Bron: {data.source}</span>}
+    <span>{formatDate(data.pubDate)}</span>
+  </div>
+
+  {data.tags.length > 0 && (
+    <div style="margin-bottom: 1.5rem; display: flex; flex-wrap: wrap; gap: 0.4rem;">
+      {data.tags.map((tag) => (
+        <span style="background: #f0ece6; padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.85em;">
+          {tag}
+        </span>
+      ))}
+    </div>
+  )}
+
+  {data.ratings && Object.keys(data.ratings).length > 0 && (
+    <div style="margin-bottom: 1.5rem; background: #f7f5f2; padding: 0.75rem 1rem; border-radius: 6px; display: inline-flex; gap: 1.5rem;">
+      {Object.entries(data.ratings).map(([key, emoji]) => (
+        <span><strong>{ratingNames[key] ?? key}</strong> {emoji}</span>
+      ))}
+    </div>
+  )}
+
+  <h2>Ingrediënten</h2>
+  <ul style="padding-left: 1.25rem;">
+    {data.ingredients.map((ing) => (
+      <li>
+        <span data-quantity={ing.quantity}>{ing.quantity}</span> {ing.unit} {ing.name}
+      </li>
+    ))}
+  </ul>
+
+  <Content />
+</Base>
