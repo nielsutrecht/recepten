@@ -1,0 +1,59 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import RecipeCard from '../../components/RecipeCard.astro';
+
+export async function getStaticPaths() {
+  const recipes = await getCollection('recipes', (r) => !r.data.draft);
+  const tags = [...new Set(recipes.flatMap((r) => r.data.tags))];
+  return tags.map((tag) => ({
+    params: { tag },
+    props: {
+      recipes: recipes
+        .filter((r) => r.data.tags.includes(tag))
+        .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()),
+    },
+  }));
+}
+
+const { tag } = Astro.params;
+const { recipes } = Astro.props;
+const base = import.meta.env.BASE_URL;
+---
+
+<Base title={tag}>
+  <a href={base} class="back-link">← Alle recepten</a>
+  <h1>{tag} <span class="count">({recipes.length})</span></h1>
+  <div class="recipe-grid">
+    {recipes.map((recipe) => <RecipeCard recipe={recipe} base={base} />)}
+  </div>
+</Base>
+
+<style>
+  .back-link {
+    display: inline-block;
+    margin-bottom: 1rem;
+    color: #888;
+    text-decoration: none;
+    font-size: 0.9em;
+  }
+
+  .back-link:hover { color: #b85c38; }
+
+  .count {
+    font-weight: 400;
+    color: #888;
+    font-size: 0.85em;
+  }
+
+  .recipe-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+
+  @media (max-width: 480px) {
+    .recipe-grid { grid-template-columns: 1fr; }
+  }
+</style>

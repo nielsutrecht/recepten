@@ -1,124 +1,154 @@
 ---
 import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
+import RecipeCard from '../components/RecipeCard.astro';
 
 const base = import.meta.env.BASE_URL;
 
 const recipes = (await getCollection('recipes', (r) => !r.data.draft))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
-function totalTime(prepTime: number, cookTime?: number): string {
-  return `${prepTime + (cookTime ?? 0)} min`;
-}
-
-const ratingNames: Record<string, string> = { emma: 'Emma', annemijn: 'Annemijn' };
+const allTags = [...new Set(recipes.flatMap((r) => r.data.tags))].sort();
 ---
 
 <Base title="Recepten">
   <h1>Recepten</h1>
-  <div class="recipe-grid">
-    {recipes.map((recipe) => {
-      const category = recipe.id.split('/')[0];
-      const ratings = recipe.data.ratings
-        ? Object.entries(recipe.data.ratings)
-        : [];
-      return (
-        <a href={`${base}/${recipe.id}/`} class="recipe-card">
-          <div class="card-meta">
-            <span class="card-category">{category}</span>
-            <span class="card-time">{totalTime(recipe.data.prepTime, recipe.data.cookTime)}</span>
-          </div>
-          <div class="card-title">{recipe.data.title}</div>
-          {recipe.data.tags.length > 0 && (
-            <div class="card-tags">
-              {recipe.data.tags.map((tag) => (
-                <span class="tag">{tag}</span>
-              ))}
-            </div>
-          )}
-          {ratings.length > 0 && (
-            <div class="card-ratings">
-              {ratings.map(([key, emoji]) => (
-                <span>{ratingNames[key] ?? key} {emoji}</span>
-              ))}
-            </div>
-          )}
-        </a>
-      );
-    })}
+
+  <div class="filter-bar">
+    <input
+      type="search"
+      id="search"
+      placeholder="Zoek een recept…"
+      autocomplete="off"
+    />
+    <div class="tag-chips" id="tag-chips">
+      {allTags.map((tag) => (
+        <button class="chip" data-tag={tag}>{tag}</button>
+      ))}
+    </div>
   </div>
+
+  <div class="recipe-grid" id="recipe-grid">
+    {recipes.map((recipe) => <RecipeCard recipe={recipe} base={base} />)}
+  </div>
+
+  <p class="no-results" id="no-results" style="display:none;">
+    Geen recepten gevonden.
+  </p>
 </Base>
 
 <style>
+  .filter-bar {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  #search {
+    width: 100%;
+    padding: 0.6rem 0.875rem;
+    font-size: 1rem;
+    border: 1px solid #d0cbc5;
+    border-radius: 6px;
+    background: #fff;
+    color: #1a1a1a;
+    outline: none;
+    font-family: inherit;
+  }
+
+  #search:focus {
+    border-color: #b85c38;
+    box-shadow: 0 0 0 2px rgba(184, 92, 56, 0.15);
+  }
+
+  .tag-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .chip {
+    padding: 0.25rem 0.65rem;
+    font-size: 0.82em;
+    border: 1px solid #d0cbc5;
+    border-radius: 999px;
+    background: #fff;
+    color: #555;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.1s, color 0.1s, border-color 0.1s;
+  }
+
+  .chip:hover {
+    border-color: #b85c38;
+    color: #b85c38;
+  }
+
+  .chip.active {
+    background: #b85c38;
+    border-color: #b85c38;
+    color: #fff;
+  }
+
   .recipe-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 1rem;
-    margin-top: 1.5rem;
   }
 
   @media (max-width: 480px) {
-    .recipe-grid {
-      grid-template-columns: 1fr;
-    }
+    .recipe-grid { grid-template-columns: 1fr; }
   }
 
-  .recipe-card {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    padding: 1rem;
-    background: #fff;
-    border: 1px solid #e8e4df;
-    border-radius: 8px;
-    text-decoration: none;
-    color: inherit;
-    transition: border-color 0.15s, box-shadow 0.15s;
-  }
-
-  .recipe-card:hover {
-    border-color: #b85c38;
-    box-shadow: 0 2px 8px rgba(184, 92, 56, 0.1);
-  }
-
-  .card-meta {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.8em;
+  .no-results {
     color: #888;
-  }
-
-  .card-category {
-    text-transform: lowercase;
-  }
-
-  .card-title {
-    font-size: 1.05rem;
-    font-weight: 600;
-    color: #1a1a1a;
-    line-height: 1.3;
-  }
-
-  .card-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.3rem;
-  }
-
-  .tag {
-    background: #f0ece6;
-    padding: 0.15rem 0.5rem;
-    border-radius: 4px;
-    font-size: 0.78em;
-    color: #555;
-  }
-
-  .card-ratings {
-    display: flex;
-    gap: 0.75rem;
-    font-size: 0.85em;
-    color: #555;
-    margin-top: auto;
-    padding-top: 0.25rem;
+    text-align: center;
+    padding: 2rem 0;
   }
 </style>
+
+<script>
+  (function () {
+    const searchInput = document.getElementById('search') as HTMLInputElement | null;
+    const grid = document.getElementById('recipe-grid');
+    const noResults = document.getElementById('no-results');
+    const chips = document.querySelectorAll<HTMLButtonElement>('.chip');
+
+    if (!searchInput || !grid || !noResults) return;
+
+    const activeTags = new Set<string>();
+
+    function applyFilters() {
+      const query = searchInput!.value.toLowerCase().trim();
+      let visible = 0;
+
+      grid!.querySelectorAll<HTMLElement>('.recipe-card').forEach((card) => {
+        const titleMatch = !query || (card.dataset.title ?? '').includes(query);
+        const cardTags = (card.dataset.tags ?? '').split(',').filter(Boolean);
+        const tagMatch = activeTags.size === 0 || cardTags.some((t) => activeTags.has(t));
+        const show = titleMatch && tagMatch;
+        card.style.display = show ? '' : 'none';
+        if (show) visible++;
+      });
+
+      noResults!.style.display = visible === 0 ? '' : 'none';
+    }
+
+    searchInput.addEventListener('input', applyFilters);
+
+    chips.forEach((chip) => {
+      chip.addEventListener('click', () => {
+        const tag = chip.dataset.tag ?? '';
+        if (activeTags.has(tag)) {
+          activeTags.delete(tag);
+          chip.classList.remove('active');
+        } else {
+          activeTags.add(tag);
+          chip.classList.add('active');
+        }
+        applyFilters();
+      });
+    });
+  })();
+</script>
