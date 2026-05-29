@@ -7,11 +7,11 @@ tags: ["italiaans", "saus", "vegetarisch"]
 source: "https://myfoody.nl/groene-pesto-met-cashewnoten/"
 draft: false
 ingredients:
-  - { quantity: 160, unit: "g", name: "verse basilicum", category: "groente en fruit" }
-  - { quantity: 50, unit: "g", name: "Parmezaanse kaas", category: "kaas" }
-  - { quantity: 60, unit: "g", name: "cashewnoten", category: "overig" }
+  - { quantity: 30, unit: "g", name: "verse basilicum", category: "groente en fruit" }
+  - { quantity: 45, unit: "g", name: "Parmezaanse kaas", category: "kaas" }
+  - { quantity: 30, unit: "g", name: "cashewnoten", category: "overig" }
   - { quantity: 1, unit: "teentjes", name: "knoflook", category: "groente en fruit" }
-  - { quantity: 20, unit: "ml", name: "olijfolie", category: "sauzen en kruiden" }
+  - { quantity: 50, unit: "ml", name: "olijfolie", category: "sauzen en kruiden" }
 ---
 
 ## Bereiding
