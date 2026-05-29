@@ -27,6 +27,15 @@ All quantities **metric**. Recipe body uses `## Bereiding` for method steps.
 
 Kids rating emojis: 😍 😊 😐 😒 🤢 (for Emma and Annemijn).
 
+### Recipe import rules
+
+When importing recipes from external sources:
+
+- **Strip all commentary** — ingredient names must be clean (e.g. `"ui, fijngesnipperd"` not `"ui, fijngesnipperd, want anders..."`); steps must contain only the action, not tips, explanations, or caveats
+- **Steps in Dutch** — translate if the source is in another language; write in plain instructional Dutch
+- **Clear and concise steps** — one action per step; move tips and variations to a `## Notities` section if worth keeping, otherwise discard them
+- **`source` must be a URL** — omit `source` entirely for own recipes
+
 ## Commands
 
 ```bash
