@@ -35,6 +35,8 @@ When importing recipes from external sources:
 - **Steps in Dutch** — translate if the source is in another language; write in plain instructional Dutch
 - **Clear and concise steps** — one action per step; move tips and variations to a `## Notities` section if worth keeping, otherwise discard them
 - **`source` must be a URL** — omit `source` entirely for own recipes
+- **Rice cooker** — always replace rice cooking steps with a single step: `"Bereid de rijst in de rijstkoker volgens de gebruiksaanwijzing."`
+- **Remove redundant ingredients** — after adapting steps (e.g. rice cooker, simplifications), remove any ingredients no longer used in the recipe
 
 ## Commands
 
