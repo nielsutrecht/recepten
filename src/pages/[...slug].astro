@@ -24,25 +24,28 @@ const ratingNames: Record<string, string> = { emma: 'Emma', annemijn: 'Annemijn'
 <Base title={data.title}>
   <h1>{data.title}</h1>
 
-  <div style="color: #666; font-size: 0.9em; margin-bottom: 1.5rem; display: flex; flex-wrap: wrap; gap: 1rem;">
+  <div class="recipe-meta">
     <span>Bereidingstijd: {data.prepTime} min{data.cookTime ? ` + ${data.cookTime} min` : ''}</span>
-    <span>Porties: {data.servings}</span>
-    {data.source && <span>Bron: {data.source}</span>}
+    <span class="servings-scaler">
+      Porties:
+      <button id="btn-minus" aria-label="Minder porties">−</button>
+      <span id="servings-count">{data.servings}</span>
+      <button id="btn-plus" aria-label="Meer porties">+</button>
+    </span>
+    {data.source && <span>Bron: <a href={data.source} target="_blank" rel="noopener">{new URL(data.source).hostname.replace(/^www\./, '')}</a></span>}
     <span>{formatDate(data.pubDate)}</span>
   </div>
 
   {data.tags.length > 0 && (
-    <div style="margin-bottom: 1.5rem; display: flex; flex-wrap: wrap; gap: 0.4rem;">
+    <div class="tags">
       {data.tags.map((tag) => (
-        <span style="background: #f0ece6; padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.85em;">
-          {tag}
-        </span>
+        <span class="tag">{tag}</span>
       ))}
     </div>
   )}
 
   {data.ratings && Object.keys(data.ratings).length > 0 && (
-    <div style="margin-bottom: 1.5rem; background: #f7f5f2; padding: 0.75rem 1rem; border-radius: 6px; display: inline-flex; gap: 1.5rem;">
+    <div class="ratings">
       {Object.entries(data.ratings).map(([key, emoji]) => (
         <span><strong>{ratingNames[key] ?? key}</strong> {emoji}</span>
       ))}
@@ -50,13 +53,149 @@ const ratingNames: Record<string, string> = { emma: 'Emma', annemijn: 'Annemijn'
   )}
 
   <h2>Ingrediënten</h2>
-  <ul style="padding-left: 1.25rem;">
+  <ul class="ingredients" data-default-servings={data.servings}>
     {data.ingredients.map((ing) => (
       <li>
-        <span data-quantity={ing.quantity}>{ing.quantity}</span> {ing.unit} {ing.name}
+        <span class="qty" data-quantity={ing.quantity}>{ing.quantity}</span> {ing.unit} {ing.name}
       </li>
     ))}
   </ul>
 
   <Content />
 </Base>
+
+<style>
+  .recipe-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    color: #666;
+    font-size: 0.9em;
+    margin-bottom: 1.5rem;
+    align-items: center;
+  }
+
+  .recipe-meta a {
+    color: inherit;
+  }
+
+  .servings-scaler {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .servings-scaler button {
+    width: 2rem;
+    height: 2rem;
+    border: 1px solid #d0cbc5;
+    border-radius: 4px;
+    background: #f7f5f2;
+    cursor: pointer;
+    font-size: 1.1rem;
+    line-height: 1;
+    color: #444;
+    touch-action: manipulation;
+  }
+
+  .servings-scaler button:hover {
+    background: #ede9e4;
+    border-color: #b85c38;
+  }
+
+  #servings-count {
+    min-width: 1.5rem;
+    text-align: center;
+    font-weight: 600;
+    color: #1a1a1a;
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .tag {
+    background: #f0ece6;
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+    font-size: 0.85em;
+  }
+
+  .ratings {
+    display: inline-flex;
+    gap: 1.5rem;
+    background: #f7f5f2;
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    margin-bottom: 1.5rem;
+    font-size: 0.95em;
+  }
+
+  .ingredients {
+    padding-left: 1.25rem;
+  }
+</style>
+
+<script>
+  (function () {
+    const FRACTIONS: Record<string, string> = {
+      '0.25': '¼',
+      '0.5': '½',
+      '0.75': '¾',
+      '0.33': '⅓',
+      '0.67': '⅔',
+    };
+
+    function roundKitchen(value: number): string {
+      let rounded: number;
+      if (value >= 100) {
+        rounded = Math.round(value / 10) * 10;
+      } else if (value >= 20) {
+        rounded = Math.round(value / 5) * 5;
+      } else if (value >= 5) {
+        rounded = Math.round(value);
+      } else if (value >= 1) {
+        rounded = Math.round(value * 2) / 2;
+      } else {
+        rounded = Math.round(value * 4) / 4;
+        const key = rounded.toFixed(2).replace(/\.?0+$/, '');
+        if (FRACTIONS[key]) return FRACTIONS[key];
+      }
+      return rounded % 1 === 0 ? String(rounded) : String(rounded);
+    }
+
+    const ingredientsList = document.querySelector<HTMLElement>('.ingredients');
+    const servingsDisplay = document.getElementById('servings-count');
+    const btnMinus = document.getElementById('btn-minus');
+    const btnPlus = document.getElementById('btn-plus');
+
+    if (!ingredientsList || !servingsDisplay || !btnMinus || !btnPlus) return;
+
+    const defaultServings = parseInt(ingredientsList.dataset.defaultServings ?? '4', 10);
+    let currentServings = defaultServings;
+
+    function updateQuantities() {
+      servingsDisplay!.textContent = String(currentServings);
+      ingredientsList!.querySelectorAll<HTMLElement>('[data-quantity]').forEach((el) => {
+        const original = parseFloat(el.dataset.quantity ?? '0');
+        const scaled = original * (currentServings / defaultServings);
+        el.textContent = roundKitchen(scaled);
+      });
+    }
+
+    btnMinus.addEventListener('click', () => {
+      if (currentServings > 1) {
+        currentServings--;
+        updateQuantities();
+      }
+    });
+
+    btnPlus.addEventListener('click', () => {
+      currentServings++;
+      updateQuantities();
+    });
+  })();
+</script>

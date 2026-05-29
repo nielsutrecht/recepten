@@ -5,7 +5,6 @@ servings: 4
 prepTime: 10
 cookTime: 25
 tags: ["soep", "vegetarisch", "snel"]
-source: "Eigen recept"
 ratings:
   emma: "😍"
   annemijn: "😊"
