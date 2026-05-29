@@ -15,6 +15,9 @@ ingredients:
   - { quantity: 0.5, unit: "tl", name: "chilivlokken", category: "sauzen en kruiden" }
   - { quantity: 850, unit: "ml", name: "San Marzano tomaten in blik", category: "conserven" }
   - { quantity: 50, unit: "g", name: "Pecorino Romano", category: "kaas" }
+ratings:
+  emma: "😍"
+  annemijn: "😐"
 ---
 
 ## Bereiding

@@ -15,6 +15,9 @@ ingredients:
   - { quantity: 200, unit: "ml", name: "espressokoffie", category: "overig" }
   - { quantity: 175, unit: "g", name: "lange vingers", category: "bakken" }
   - { quantity: 1, unit: "el", name: "cacaopoeder", category: "bakken" }
+ratings:
+  emma: "😐"
+  annemijn: "😍"
 ---
 
 ## Bereiding

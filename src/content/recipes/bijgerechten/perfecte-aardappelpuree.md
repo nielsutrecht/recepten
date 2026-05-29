@@ -14,6 +14,9 @@ ingredients:
   - { quantity: 100, unit: "g", name: "ongezouten roomboter", category: "zuivel en eieren" }
   - { quantity: 0.5, unit: "tl", name: "zout", category: "sauzen en kruiden" }
   - { quantity: 0.25, unit: "tl", name: "gemalen nootmuskaat", category: "sauzen en kruiden" }
+ratings:
+  emma: "🤢"
+  annemijn: "🤢"
 ---
 
 ## Bereiding
