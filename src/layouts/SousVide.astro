@@ -1,0 +1,65 @@
+---
+import Base from './Base.astro';
+const base = import.meta.env.BASE_URL;
+const { frontmatter } = Astro.props;
+---
+
+<Base
+  title={frontmatter.title}
+  breadcrumbs={[{ label: 'Recepten', href: base }, { label: 'Sous Vide' }]}
+>
+  {frontmatter.subtitle && <p class="subtitle">{frontmatter.subtitle}</p>}
+  <slot />
+</Base>
+
+<style is:global>
+  .sous-vide h1 { margin-bottom: 0.25rem; }
+
+  .subtitle {
+    color: #666;
+    margin: 0 0 2rem;
+    font-size: 0.95em;
+  }
+
+  main h2 {
+    font-size: 1.1rem;
+    margin: 2rem 0 0.75rem;
+    color: #b85c38;
+  }
+
+  main table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95em;
+    margin-bottom: 0.5rem;
+  }
+
+  main thead th {
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.8em;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #888;
+    border-bottom: 2px solid #e8e4df;
+    padding: 0.4rem 0.75rem 0.4rem 0;
+  }
+
+  main tbody td {
+    padding: 0.5rem 0.75rem 0.5rem 0;
+    border-bottom: 1px solid #f0ede9;
+    vertical-align: top;
+  }
+
+  main tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  main tbody td:nth-child(3),
+  main thead th:nth-child(3),
+  main tbody td:nth-child(4),
+  main thead th:nth-child(4) {
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+  }
+</style>
