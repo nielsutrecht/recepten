@@ -5,6 +5,9 @@ servings: 4
 prepTime: 10
 cookTime: 20
 tags: ["hoofdgerecht", "italiaans", "pasta", "pittig"]
+ratings:
+  emma: 😍
+  annemijn: 😍
 draft: false
 ingredients:
   - { quantity: 400, unit: "g", name: "penne rigate of rigatoni", category: "pasta en granen" }
